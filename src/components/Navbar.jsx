@@ -1,5 +1,7 @@
+
 import { Link, NavLink } from 'react-router-dom';
 import { ShoppingCart, User } from 'lucide-react';
+import TSBLogo from '../assets/TechsathiBhopal.png';
 
 const Navbar = () => {
   const activeStyle = "text-orange-500 font-bold border-b-2 border-orange-500 pb-1";
@@ -11,8 +13,12 @@ const Navbar = () => {
         
         {/* Brand Logo - Links to Home */}
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-[#003366] text-white p-2 rounded-lg font-bold group-hover:scale-110 transition-transform">TS</div>
-          <span className="text-2xl font-bold text-[#003366]">TechSathi</span>
+          <div onClick={() => navigate('/')} className="cursor-pointer">
+             <img src={TSBLogo} alt="TSB Logo" className="h-12 w-auto hover:scale-105 transition-transform" />
+         </div>
+          <h1 className="text-xl font-black text-[#003366] tracking-tight">
+           TechSathi<span className="text-orange-500">Bhopal</span>
+         </h1>
         </Link>
 
         {/* Menu Links */}

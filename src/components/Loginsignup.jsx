@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaLock, FaArrowRight } from 'react-icons/fa';
 
 import axios from 'axios'; // Add this at the top of your file
+import { useNavigate } from 'react-router-dom';
 
 
 const LoginSignup = () => {
@@ -16,6 +17,7 @@ const LoginSignup = () => {
     mobile: '',
     email: ''
   });
+  const navigate = useNavigate();
 
  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,20 +50,44 @@ const LoginSignup = () => {
     }
   };
 
- const handleVerifyOtp = async (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/verify-otp', {
-        email: formData.email, // Use email here to match the backend change
-        otp: otpValue
-      });
-      alert(response.data.message);
-      setShowOtp(false);
-      setIsLogin(true); // Redirect to Login after verification
+
+
+
+      // Inside handleVerifyOtp in Loginsignup.jsx
+const response = await axios.post('http://localhost:5000/api/verify-otp', {
+  email: formData.email,
+  otp: otpValue
+});
+
+localStorage.setItem('token', response.data.token);
+// Save user info for the Navbar to read
+localStorage.setItem('userData', JSON.stringify(response.data.user)); 
+
+navigate('/dashboard');
+window.location.reload(); // Quick way to refresh Navbar state
+    //   const response = await axios.post('http://localhost:5000/api/verify-otp', {
+    //     email: formData.email,
+    //     otp: otpValue
+    //   });
+
+    //   // 💾 SAVE TOKEN LOCALLY
+    //   localStorage.setItem('token', response.data.token);
+      
+
+    //   alert("Welcome to TechSathi!");
+    //   navigate('/dashboard');
+    //   setShowOtp(false);
+    //   // Now redirect them to the Dashboard!
+    // } catch (error) {
+    //   alert(error.response?.data?.error || "Invalid OTP");
     } catch (error) {
       alert(error.response?.data?.error || "Invalid OTP");
     }
   };
+
 
   const bhopalAreas = ["MP Nagar", "Arera Colony", "Gulmohar", "Kolar Road", "Indrapuri", "BHEL"];
 
@@ -318,3 +344,19 @@ export default LoginSignup;
   //     </div>
   //   </div>
   // );
+
+
+  //  const handleVerifyOtp = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await axios.post('http://localhost:5000/api/verify-otp', {
+//         email: formData.email, // Use email here to match the backend change
+//         otp: otpValue
+//       });
+//       alert(response.data.message);
+//       setShowOtp(false);
+//       setIsLogin(true); // Redirect to Login after verification
+//     } catch (error) {
+//       alert(error.response?.data?.error || "Invalid OTP");
+//     }
+//   };
