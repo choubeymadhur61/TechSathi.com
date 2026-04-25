@@ -50,41 +50,33 @@ const LoginSignup = () => {
     }
   };
 
-  const handleVerifyOtp = async (e) => {
+
+const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
+      const response = await axios.post('http://localhost:5000/api/verify-otp', {
+        email: formData.email,
+        otp: otpValue
+      });
 
-
-
-      // Inside handleVerifyOtp in Loginsignup.jsx
-const response = await axios.post('http://localhost:5000/api/verify-otp', {
-  email: formData.email,
-  otp: otpValue
-});
-
-localStorage.setItem('token', response.data.token);
-// Save user info for the Navbar to read
-localStorage.setItem('userData', JSON.stringify(response.data.user)); 
-
-navigate('/dashboard');
-window.location.reload(); // Quick way to refresh Navbar state
-    //   const response = await axios.post('http://localhost:5000/api/verify-otp', {
-    //     email: formData.email,
-    //     otp: otpValue
-    //   });
-
-    //   // 💾 SAVE TOKEN LOCALLY
-    //   localStorage.setItem('token', response.data.token);
+      // 1. Save Token for security
+      localStorage.setItem('token', response.data.token);
       
+      // 2. IMPORTANT: Save the name specifically so Navbar can read it
+      // Hamara Navbar "userName" key ko dhoond raha hai
+      localStorage.setItem('userName', response.data.user.name); 
 
-    //   alert("Welcome to TechSathi!");
-    //   navigate('/dashboard');
-    //   setShowOtp(false);
-    //   // Now redirect them to the Dashboard!
-    // } catch (error) {
-    //   alert(error.response?.data?.error || "Invalid OTP");
+      alert("Welcome to TechSathiBhopal!");
+      
+      // 3. Navigate to Dashboard
+      navigate('/dashboard');
+      
+      // 4. Force refresh taaki Navbar "userName" ko read kar le
+      window.location.reload(); 
+      
     } catch (error) {
-      alert(error.response?.data?.error || "Invalid OTP");
+      console.error("Verification Error:", error);
+      alert(error.response?.data?.error || "Invalid OTP. Please try again.");
     }
   };
 
@@ -356,6 +348,53 @@ export default LoginSignup;
 //       alert(response.data.message);
 //       setShowOtp(false);
 //       setIsLogin(true); // Redirect to Login after verification
+//     } catch (error) {
+//       alert(error.response?.data?.error || "Invalid OTP");
+//     }
+//   };
+
+
+
+
+
+
+
+
+
+
+//   const handleVerifyOtp = async (e) => {
+//     e.preventDefault();
+//     try {
+
+
+
+//       // Inside handleVerifyOtp in Loginsignup.jsx
+// const response = await axios.post('http://localhost:5000/api/verify-otp', {
+//   email: formData.email,
+//   otp: otpValue
+// });
+
+// localStorage.setItem('token', response.data.token);
+// // Save user info for the Navbar to read
+// localStorage.setItem('userData', JSON.stringify(response.data.user)); 
+
+// navigate('/dashboard');
+// window.location.reload(); // Quick way to refresh Navbar state
+//     //   const response = await axios.post('http://localhost:5000/api/verify-otp', {
+//     //     email: formData.email,
+//     //     otp: otpValue
+//     //   });
+
+//     //   // 💾 SAVE TOKEN LOCALLY
+//     //   localStorage.setItem('token', response.data.token);
+      
+
+//     //   alert("Welcome to TechSathi!");
+//     //   navigate('/dashboard');
+//     //   setShowOtp(false);
+//     //   // Now redirect them to the Dashboard!
+//     // } catch (error) {
+//     //   alert(error.response?.data?.error || "Invalid OTP");
 //     } catch (error) {
 //       alert(error.response?.data?.error || "Invalid OTP");
 //     }

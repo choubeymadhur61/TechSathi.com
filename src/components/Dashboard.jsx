@@ -1,105 +1,193 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { FaUserCircle, FaTools, FaLaptop, FaNetworkWired } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingData, setBookingData] = useState({
-    deviceType: 'Laptop',
-    issueDescription: '',
-    preferredDate: ''
-  });
+  const [user, setUser] = useState("");
+  const navigate = useNavigate();
 
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/book-service', bookingData, {
-        headers: { Authorization: token } // Sending JWT for security
-      });
-      alert(response.data.message);
-      setIsModalOpen(false);
-    } catch (error) {
-      alert("Booking failed. Please try again.");
+  useEffect(() => {
+    const savedUser = localStorage.getItem('userName');
+    if (!savedUser) {
+      navigate('/'); // Agar login nahi hai toh wapas bhej dein
+    } else {
+      setUser(savedUser);
     }
-  };
+  }, [navigate]);
+
+  // Services Data (Aap Services.jsx se categories le sakte hain)
+  const services = [
+    { id: 1, title: "Hardware Repair", icon: <FaTools />, desc: "Laptop/Desktop repair at your doorstep." },
+    { id: 2, title: "OS Installation", icon: <FaLaptop  />, desc: "Windows/Linux setup and optimization." },
+    { id: 3, title: "Networking", icon: <FaNetworkWired />, desc: "Router setup and LAN management in Bhopal." }
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 p-10">
-      {/* ... existing sidebar and header code ... */}
-
-      {/* Booking Trigger Card */}
-      <div 
-        onClick={() => setIsModalOpen(true)}
-        className="p-6 bg-orange-500 text-white rounded-2xl shadow-lg cursor-pointer hover:bg-orange-600 transition-all"
-      >
-        <h4 className="font-bold text-lg">New Booking</h4>
-        <p className="text-sm opacity-90">Schedule a visit from a TechSathi expert.</p>
+    <div className="flex min-h-screen bg-slate-50">
+      
+      {/* 1. LEFT SIDEBAR: User Profile */}
+      <div className="w-1/4 bg-[#003366] text-white p-8 flex flex-col items-center border-r border-slate-200">
+        <div className="mb-6">
+          <FaUserCircle size={80} className="text-orange-500 bg-white rounded-full p-1" />
+        </div>
+        <h2 className="text-xl font-bold mb-2">Welcome,</h2>
+        <p className="text-2xl font-black text-orange-500 uppercase tracking-wide">{user}</p>
+        
+        <div className="mt-10 w-full">
+          <button className="w-full text-left py-3 px-4 rounded-lg hover:bg-slate-700 transition-all mb-2 bg-slate-800">My Profile</button>
+          <button className="w-full text-left py-3 px-4 rounded-lg hover:bg-slate-700 transition-all mb-2">Service History</button>
+          <button className="w-full text-left py-3 px-4 rounded-lg hover:bg-slate-700 transition-all mb-2">Support Tickets</button>
+        </div>
       </div>
 
-      {/* --- BOOKING MODAL --- */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-[2rem] max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
-            <h2 className="text-2xl font-black text-[#003366] mb-6">Book a Service</h2>
-            
-            <form onSubmit={handleBookingSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Device Type</label>
-                <select 
-                  className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500"
-                  onChange={(e) => setBookingData({...bookingData, deviceType: e.target.value})}
-                >
-                  <option value="Laptop">Laptop</option>
-                  <option value="Desktop">Desktop</option>
-                  <option value="Networking">Networking</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Issue Description</label>
-                <textarea 
-                  required
-                  placeholder="E.g., Laptop motherboard not turning on, or SSD upgrade needed."
-                  className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 h-32"
-                  onChange={(e) => setBookingData({...bookingData, issueDescription: e.target.value})}
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Preferred Visit Date</label>
-                <input 
-                  type="date" 
-                  required
-                  className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500"
-                  onChange={(e) => setBookingData({...bookingData, preferredDate: e.target.value})}
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <button 
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit"
-                  className="flex-1 py-4 bg-[#003366] text-white rounded-xl font-bold shadow-lg"
-                >
-                  Confirm Booking
-                </button>
-              </div>
-            </form>
-          </div>
+      {/* 2. MIDDLE SECTION: Services Grid */}
+      <div className="flex-1 p-10">
+        <div className="mb-8">
+          <h1 className="text-3xl font-black text-slate-800">Available <span className="text-orange-500">Services</span></h1>
+          <p className="text-slate-500">Select a service to book a TechSathi professional in Bhopal.</p>
         </div>
-      )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service) => (
+            <div key={service.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group cursor-pointer">
+              <div className="text-orange-500 text-3xl mb-4 group-hover:scale-110 transition-transform">
+                {service.icon}
+              </div>
+              <h3 className="text-xl font-bold text-[#003366] mb-2">{service.title}</h3>
+              <p className="text-slate-600 text-sm mb-4">{service.desc}</p>
+              <button className="w-full py-2 bg-slate-100 text-[#003366] font-bold rounded-lg hover:bg-orange-500 hover:text-white transition-all">
+                Book Now
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+
+// const Dashboard = () => {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [bookingData, setBookingData] = useState({
+//     deviceType: 'Laptop',
+//     issueDescription: '',
+//     preferredDate: ''
+//   });
+
+//   const handleBookingSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const token = localStorage.getItem('token');
+//       const response = await axios.post('http://localhost:5000/api/book-service', bookingData, {
+//         headers: { Authorization: token } // Sending JWT for security
+//       });
+//       alert(response.data.message);
+//       setIsModalOpen(false);
+//     } catch (error) {
+//       alert("Booking failed. Please try again.");
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-slate-50 p-10">
+//       {/* ... existing sidebar and header code ... */}
+
+//       {/* Booking Trigger Card */}
+//       <div 
+//         onClick={() => setIsModalOpen(true)}
+//         className="p-6 bg-orange-500 text-white rounded-2xl shadow-lg cursor-pointer hover:bg-orange-600 transition-all"
+//       >
+//         <h4 className="font-bold text-lg">New Booking</h4>
+//         <p className="text-sm opacity-90">Schedule a visit from a TechSathi expert.</p>
+//       </div>
+
+//       {/* --- BOOKING MODAL --- */}
+//       {isModalOpen && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//           <div className="bg-white rounded-[2rem] max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
+//             <h2 className="text-2xl font-black text-[#003366] mb-6">Book a Service</h2>
+            
+//             <form onSubmit={handleBookingSubmit} className="space-y-4">
+//               <div>
+//                 <label className="block text-sm font-bold text-slate-700 mb-2">Device Type</label>
+//                 <select 
+//                   className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500"
+//                   onChange={(e) => setBookingData({...bookingData, deviceType: e.target.value})}
+//                 >
+//                   <option value="Laptop">Laptop</option>
+//                   <option value="Desktop">Desktop</option>
+//                   <option value="Networking">Networking</option>
+//                   <option value="Other">Other</option>
+//                 </select>
+//               </div>
+
+//               <div>
+//                 <label className="block text-sm font-bold text-slate-700 mb-2">Issue Description</label>
+//                 <textarea 
+//                   required
+//                   placeholder="E.g., Laptop motherboard not turning on, or SSD upgrade needed."
+//                   className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500 h-32"
+//                   onChange={(e) => setBookingData({...bookingData, issueDescription: e.target.value})}
+//                 ></textarea>
+//               </div>
+
+//               <div>
+//                 <label className="block text-sm font-bold text-slate-700 mb-2">Preferred Visit Date</label>
+//                 <input 
+//                   type="date" 
+//                   required
+//                   className="w-full p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-orange-500"
+//                   onChange={(e) => setBookingData({...bookingData, preferredDate: e.target.value})}
+//                 />
+//               </div>
+
+//               <div className="flex gap-4 pt-4">
+//                 <button 
+//                   type="button"
+//                   onClick={() => setIsModalOpen(false)}
+//                   className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold"
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button 
+//                   type="submit"
+//                   className="flex-1 py-4 bg-[#003366] text-white rounded-xl font-bold shadow-lg"
+//                 >
+//                   Confirm Booking
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
 
 
 
