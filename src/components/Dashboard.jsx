@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FaUserCircle, FaTools, FaLaptop, FaNetworkWired } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import ServiceCard from './ServiceCard';
+import axios from 'axios';
 
 const Dashboard = () => {
   const [user, setUser] = useState("");
+  const [services, setServices] = useState([]); // Database data ke liye
   const navigate = useNavigate();
+  // const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('userName');
@@ -15,15 +19,30 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
-  // Services Data (Aap Services.jsx se categories le sakte hain)
-  const services = [
-    { id: 1, title: "Hardware Repair", icon: <FaTools />, desc: "Laptop/Desktop repair at your doorstep." },
-    { id: 2, title: "OS Installation", icon: <FaLaptop  />, desc: "Windows/Linux setup and optimization." },
-    { id: 3, title: "Networking", icon: <FaNetworkWired />, desc: "Router setup and LAN management in Bhopal." }
-  ];
+ useEffect(() => {
+    const fetchServices = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/services');
+            setServices(response.data); // Database se aaya data yahan save hoga
+        } catch (err) {
+            console.error("Error fetching services:", err);
+        }
+    };
+    fetchServices();
+}, []);
 
+
+const addToCart = (service) => {
+    const updatedCart = [ service];
+    // setCart(updatedCart);
+    localStorage.setItem('techsathi_cart', JSON.stringify(updatedCart)); // Bhopal user data save
+    alert(`${service.title} added to your booking list!`);
+};
+ 
   return (
     <div className="flex min-h-screen bg-slate-50">
+
+      
       
       {/* 1. LEFT SIDEBAR: User Profile */}
       <div className="w-1/4 bg-[#003366] text-white p-8 flex flex-col items-center border-r border-slate-200">
@@ -41,26 +60,29 @@ const Dashboard = () => {
       </div>
 
       {/* 2. MIDDLE SECTION: Services Grid */}
+      
       <div className="flex-1 p-10">
         <div className="mb-8">
           <h1 className="text-3xl font-black text-slate-800">Available <span className="text-orange-500">Services</span></h1>
           <p className="text-slate-500">Select a service to book a TechSathi professional in Bhopal.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
-            <div key={service.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group cursor-pointer">
-              <div className="text-orange-500 text-3xl mb-4 group-hover:scale-110 transition-transform">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold text-[#003366] mb-2">{service.title}</h3>
-              <p className="text-slate-600 text-sm mb-4">{service.desc}</p>
-              <button className="w-full py-2 bg-slate-100 text-[#003366] font-bold rounded-lg hover:bg-orange-500 hover:text-white transition-all">
-                Book Now
-              </button>
-            </div>
-          ))}
-        </div>
+        
+   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {services.length > 0 ? (
+        services.map((service) => (
+           <ServiceCard 
+    key={service._id} 
+    service={service} 
+    onBook={() => addToCart(service)} // 👈 Ye function pass ho raha hai
+/>
+        ))
+    ) : (
+        <p className="text-slate-400">Loading services from Bhopal database...</p>
+    )}
+</div>
+
+      
       </div>
 
     </div>

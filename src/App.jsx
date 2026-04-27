@@ -8,18 +8,22 @@ import Footer from './Pages/Footer';
 import LoginSignup from './components/Loginsignup';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useState } from 'react';
 
 // import Footer from "./Pages/Footer"
 
 function App() {
+
+  const [cart, setCart] = useState([]);
+
   return (
     <Router>
       <div className="min-h-screen bg-slate-50">
-        <Navbar />
+        <Navbar cartCount={cart.length} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services/>} />
-          <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>  } />
+          <Route path="/dashboard" element={<ProtectedRoute> <Dashboard cart={cart} setCart={setCart} /> </ProtectedRoute>  } />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<div className="p-10 text-center text-2xl">Your Service Cart</div>} />
           <Route path="/login" element={<LoginSignup />} />

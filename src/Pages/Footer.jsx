@@ -20,8 +20,8 @@ const Footer = () => {
         {/* Brand & Vision */}
         <div className="space-y-6">
           <div className="flex items-center gap-2">
-            <div className="bg-white text-[#003366] p-2 rounded-lg font-bold">TS</div>
-            <span className="text-2xl font-bold tracking-tight">TechSathi</span>
+            <div className="bg-white text-[#003366] p-2 rounded-lg font-bold">TSB</div>
+            <span className="text-2xl font-bold tracking-tight">TechSathiBhopal</span>
           </div>
           <p className="text-slate-300 leading-relaxed">
             Revolutionizing doorstep IT support in Bhopal. We bring L2/L3 expert engineering to your home.
@@ -70,7 +70,7 @@ const Footer = () => {
               <MdEmail className="text-orange-500" />
               <div>
                 <p className="text-xs text-slate-400">Email Us</p>
-                <p className="font-bold text-sm">support@techsathi.in</p>
+                <p className="font-bold text-sm">techsathibhopal@gmail.com</p>
               </div>
             </a>
           </div>

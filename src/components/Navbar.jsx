@@ -4,7 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import TSBLogo from '../assets/TechsathiBhopal.png';
 
-const Navbar = () => {
+const Navbar = ({ cartCount }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -47,7 +47,17 @@ const Navbar = () => {
 
         {/* 3. RIGHT: Cart aur User Auth Section */}
         <div className="flex items-center gap-4">
+
+         
           <Link to="/cart" className="relative p-2 hover:bg-slate-50 rounded-full transition-all">
+          <div className="relative cursor-pointer hover:scale-110 transition-transform">
+          <ShoppingCart size={24} className="text-white" />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#003366] animate-pulse">
+              {cartCount}
+            </span>
+          )}
+        </div>
             <ShoppingCart size={22} className="text-slate-600" />
             <span className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] px-1.5 rounded-full border-2 border-white">0</span>
           </Link>
