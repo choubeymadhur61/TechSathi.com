@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaUserCircle, FaTools, FaLaptop, FaNetworkWired } from 'react-icons/fa';
+import { FaTools, FaLaptop, FaNetworkWired } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
 import axios from 'axios';
 
-const Dashboard = () => {
+const Dashboard = ({cart, setCart}) => {
   const [user, setUser] = useState("");
   const [services, setServices] = useState([]); // Database data ke liye
   const navigate = useNavigate();
@@ -31,13 +31,37 @@ const Dashboard = () => {
     fetchServices();
 }, []);
 
-
 const addToCart = (service) => {
-    const updatedCart = [ service];
-    // setCart(updatedCart);
-    localStorage.setItem('techsathi_cart', JSON.stringify(updatedCart)); // Bhopal user data save
-    alert(`${service.title} added to your booking list!`);
+  setCart((prevCart) => {
+    // Check karein ki kya item pehle se cart mein hai
+    const isExisting = prevCart.find(item => item._id === service._id);
+    
+    let updatedCart;
+    if (isExisting) {
+      // Agar hai, toh sirf quantity +1 karein
+      updatedCart = prevCart.map(item => 
+        item._id === service._id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+      );
+    } else {
+      // Agar naya hai, toh quantity 1 ke sath add karein
+      updatedCart = [...prevCart, { ...service, quantity: 1 }];
+    }
+    
+    localStorage.setItem('techsathi_cart', JSON.stringify(updatedCart));
+    return updatedCart;
+  });
+  alert(`${service.title} added to your booking list!`);
 };
+
+// const addToCart = (service) => {
+//     setCart((prevCart) => {
+//         const updatedCart = [...prevCart, service]; // Purane items + naya item
+//         localStorage.setItem('techsathi_cart', JSON.stringify(updatedCart)); // Storage backup
+//         return updatedCart;
+//     });
+//     alert(`${service.title} added to your booking list!`);
+//   };
+
  
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -47,7 +71,7 @@ const addToCart = (service) => {
       {/* 1. LEFT SIDEBAR: User Profile */}
       <div className="w-1/4 bg-[#003366] text-white p-8 flex flex-col items-center border-r border-slate-200">
         <div className="mb-6">
-          <FaUserCircle size={80} className="text-orange-500 bg-white rounded-full p-1" />
+          <FaTools size={80} className="text-orange-500 bg-white rounded-full p-1" />
         </div>
         <h2 className="text-xl font-bold mb-2">Welcome,</h2>
         <p className="text-2xl font-black text-orange-500 uppercase tracking-wide">{user}</p>

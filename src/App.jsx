@@ -8,13 +8,21 @@ import Footer from './Pages/Footer';
 import LoginSignup from './components/Loginsignup';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import { useState } from 'react';
+import Cart from './components/Cart';
+import { useState, useEffect } from 'react';
 
 // import Footer from "./Pages/Footer"
 
 function App() {
 
   const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem('techsathi_cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
 
   return (
     <Router>
@@ -25,7 +33,8 @@ function App() {
           <Route path="/services" element={<Services/>} />
           <Route path="/dashboard" element={<ProtectedRoute> <Dashboard cart={cart} setCart={setCart} /> </ProtectedRoute>  } />
           <Route path="/about" element={<About />} />
-          <Route path="/cart" element={<div className="p-10 text-center text-2xl">Your Service Cart</div>} />
+          <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} /> 
+          {/* <Route path="/cart" element={<div className="p-10 text-center text-2xl">Your Service Cart</div>} /> */}
           <Route path="/login" element={<LoginSignup />} />
         </Routes>
       </div>
