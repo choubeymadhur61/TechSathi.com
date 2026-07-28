@@ -10,6 +10,11 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Cart from './components/Cart';
 import { useState, useEffect } from 'react';
+import AccountDetails from './components/AccountDetails';
+import PaymentHistory from './components/Payment';
+import SupportTickets from './components/SupportTicket.jsx';
+import MyBookings from './components/MyBookimg';
+// import CoomingSoon from './CoomingSoon.jsx';
 
 // import Footer from "./Pages/Footer"
 
@@ -36,6 +41,10 @@ function App() {
           <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} /> 
           {/* <Route path="/cart" element={<div className="p-10 text-center text-2xl">Your Service Cart</div>} /> */}
           <Route path="/login" element={<LoginSignup />} />
+          <Route path="/profile" element={<AccountDetails />} />
+          <Route path="/bookings" element={<MyBookings />} />
+          <Route path="/payments" element={<PaymentHistory />} />
+          <Route path="/support" element={<SupportTickets />} />
         </Routes>
       </div>
       <div className="mt-12 px-6 pb-10 text-center"> <Footer /> </div>

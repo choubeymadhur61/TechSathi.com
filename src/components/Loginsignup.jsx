@@ -65,6 +65,9 @@ const handleVerifyOtp = async (e) => {
       // 2. IMPORTANT: Save the name specifically so Navbar can read it
       // Hamara Navbar "userName" key ko dhoond raha hai
       localStorage.setItem('userName', response.data.user.name); 
+      localStorage.setItem('userLocation', response.data.user.location);
+      localStorage.setItem('email', response.data.user.email);
+      localStorage.setItem('userMobile', response.data.user.mobile);
 
       alert("Welcome to TechSathiBhopal!");
       

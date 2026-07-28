@@ -3,8 +3,23 @@ import BookingForm from './BookingForm';
 // Assuming your brand image is in the assets folder
 import HeroImage from '../Image/TechSathi.png'; 
 import { ShieldCheck, Zap, MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import CoomingSoon from '../CoomingSoon.jsx';
 
 const Home = () => {
+
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+
+  const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+
   return (
     <div className="min-h-[calc(100vh-80px)] bg-slate-50">
       {/* Main Hero Section */}
@@ -96,6 +111,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <CoomingSoon isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
