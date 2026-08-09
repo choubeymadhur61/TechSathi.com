@@ -30,7 +30,7 @@ const LoginSignup = () => {
       if (isLogin) {
         console.log("Attempting Login for:", formData.email);
         // Correct port (5000) and correct path
-        const response = await axios.post('http://localhost:5000/api/login-otp', {
+        const response = await axios.post('/api/login-otp', {
           email: formData.email
         });
         alert("Signup Successful! Please check your email for the 4-digit OTP.");
@@ -38,7 +38,7 @@ const LoginSignup = () => {
       } else {
         console.log("Sending Signup Data to Backend...");
         // Correct port (5000) and correct path
-        const response = await axios.post('http://localhost:5000/api/signup', formData);
+        const response = await axios.post('/api/signup', formData);
 
         alert(`Success! ${response.data.message}`);
         setIsLogin(true); 
@@ -54,7 +54,7 @@ const LoginSignup = () => {
 const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/verify-otp', {
+      const response = await axios.post('/api/verify-otp', {
         email: formData.email,
         otp: otpValue
       });
@@ -344,7 +344,7 @@ export default LoginSignup;
   //  const handleVerifyOtp = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const response = await axios.post('http://localhost:5000/api/verify-otp', {
+//       const response = await axios.post('/api/verify-otp', {
 //         email: formData.email, // Use email here to match the backend change
 //         otp: otpValue
 //       });
@@ -372,7 +372,7 @@ export default LoginSignup;
 
 
 //       // Inside handleVerifyOtp in Loginsignup.jsx
-// const response = await axios.post('http://localhost:5000/api/verify-otp', {
+// const response = await axios.post('/api/verify-otp', {
 //   email: formData.email,
 //   otp: otpValue
 // });
@@ -383,7 +383,7 @@ export default LoginSignup;
 
 // navigate('/dashboard');
 // window.location.reload(); // Quick way to refresh Navbar state
-//     //   const response = await axios.post('http://localhost:5000/api/verify-otp', {
+//     //   const response = await axios.post('/api/verify-otp', {
 //     //     email: formData.email,
 //     //     otp: otpValue
 //     //   });

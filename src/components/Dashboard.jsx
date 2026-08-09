@@ -22,7 +22,7 @@ const Dashboard = ({cart, setCart}) => {
  useEffect(() => {
     const fetchServices = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/services');
+            const response = await axios.get('/api/services');
             setServices(response.data); // Database se aaya data yahan save hoga
         } catch (err) {
             console.error("Error fetching services:", err);
