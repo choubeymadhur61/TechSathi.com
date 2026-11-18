@@ -55,7 +55,7 @@ const SupportTickets = () => {
     try {
       const response = await fetch('/api/tickets/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
         body: JSON.stringify(payload)
       });
       const data = await response.json().catch(() => ({}));
